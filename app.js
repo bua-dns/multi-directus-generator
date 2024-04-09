@@ -11,38 +11,58 @@ import fs from 'fs';
 import path from 'path';
 import { config } from './config/project-template.js';
 
-const dockerComposeTemplateContent = fs.readFileSync(
-    path.join(process.cwd(), '/templates/docker-compose-template.yml'),
-    'utf8'
+
+// create project output folders
+
+const rootPath = process.cwd();
+const projectDirPath = path.join(rootPath, 'output', config.url);
+
+try {
+    if(!fs.existsSync(projectDirPath)) {
+        fs.mkdir(projectDirPath, (error) => {
+            if (error) console.log('mkdir error', error)
+        });
+    }
+    
+    const dockerComposeTemplateContent = fs.readFileSync(
+        path.join(process.cwd(), '/templates/docker-compose-template.yml'),
+        'utf8'
+        );
+        
+        const dockerComposeReplacements = {
+            '§§label§§': config.label,
+            '§§name§§': config.name,
+            '§§url§§': 'https://' + config.url,
+            '§§instanceCounter§§': config.instanceCounter,
+            '§§portCounter3306§§': 3306 + config.instanceCounter,
+            '§§portCounter80§§': 8080 + config.instanceCounter,
+            '§§portCounter8055§§': 8055 + config.instanceCounter,
+            '§§pwRoot§§': config.pwRoot,
+            '§§pwMariaDB§§': config.pwMariaDB,
+            '§§adminEmail§§': config.adminEmail,
+            '§§pwAdmin§§': config.pwAdmin
+        };
+        
+        let dockerComposeContent = dockerComposeTemplateContent;
+        
+        for (let entry in dockerComposeReplacements) {
+            dockerComposeContent = dockerComposeContent.replace(
+                new RegExp(entry, 'g'),
+            dockerComposeReplacements[entry]
+        );
+    }
+    
+    fs.writeFileSync(
+        path.join(projectDirPath, 'docker-compose.yml'),
+        dockerComposeContent
     );
-    
-    const dockerComposeReplacements = {
-        '§§label§§': config.label,
-        '§§name§§': config.name,
-        '§§url§§': 'https://' + config.url,
-        '§§instanceCounter§§': config.instanceCounter,
-        '§§portCounter3306§§': 3306 + config.instanceCounter,
-        '§§portCounter80§§': 8080 + config.instanceCounter,
-        '§§portCounter8055§§': 8055 + config.instanceCounter,
-        '§§pwRoot§§': config.pwRoot,
-        '§§pwMariaDB§§': config.pwMariaDB,
-        '§§adminEmail§§': config.adminEmail,
-        '§§pwAdmin§§': config.pwAdmin
-    };
-    
-    let dockerComposeContent = dockerComposeTemplateContent;
-    
-    for (let entry in dockerComposeReplacements) {
-        dockerComposeContent = dockerComposeContent.replace(
-            new RegExp(entry, 'g'),
-        dockerComposeReplacements[entry]
-    );
+    console.log('results see in: ', projectDirPath);
+    console.log('docker-compose.yml created');
+} catch (error) {
+    console.log('error', error);
 }
 
-fs.writeFileSync(
-    path.join(process.cwd(), '/docker-compose.yml'),
-    dockerComposeContent
-);
+
 
 
 //// placeholders for docker-compose.yml
