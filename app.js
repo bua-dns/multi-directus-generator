@@ -42,6 +42,11 @@ try {
             '§§adminEmail§§': config.adminEmail,
             '§§pwAdmin§§': config.pwAdmin
         };
+        // validate label
+        let validLabel = /^[a-z_]{1,10}$/.test(config.label);
+        if (!validLabel){
+            throw new Error('label must be shorter than 10 characters and contain lowercase letters and underscores only');
+        }
         
         let dockerComposeContent = dockerComposeTemplateContent;
         
