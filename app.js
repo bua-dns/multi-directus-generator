@@ -23,46 +23,106 @@ try {
             if (error) console.log('mkdir error', error)
         });
     }
+    if(!fs.existsSync(path.join(projectDirPath, 'Step-1'))) {
+        fs.mkdir(path.join(projectDirPath, 'Step-1'), (error) => {
+            if (error) console.log('mkdir error', error)
+        });
+    }
+    if(!fs.existsSync(path.join(projectDirPath, 'Step-2'))) {
+        fs.mkdir(path.join(projectDirPath, 'Step-2'), (error) => {
+            if (error) console.log('mkdir error', error)
+        });
+    }
     
     const dockerComposeTemplateContent = fs.readFileSync(
         path.join(process.cwd(), '/templates/docker-compose-template.yml'),
         'utf8'
-        );
+    );
+    const apacheConfigTemplateStep1Content = fs.readFileSync(
+        path.join(process.cwd(), '/templates/template-step-1.conf'),
+        'utf8'
+    );
+    const apacheConfigTemplateStep2Content = fs.readFileSync(
+        path.join(process.cwd(), '/templates/template-step-2.conf'),
+        'utf8'
+    );
         
-        const dockerComposeReplacements = {
-            '§§label§§': config.label,
-            '§§name§§': config.name,
-            '§§url§§': 'https://' + config.url,
-            '§§instanceCounter§§': config.instanceCounter,
-            '§§portCounter3306§§': 3306 + config.instanceCounter,
-            '§§portCounter80§§': 8080 + config.instanceCounter,
-            '§§portCounter8055§§': 8055 + config.instanceCounter,
-            '§§pwRoot§§': config.pwRoot,
-            '§§pwMariaDB§§': config.pwMariaDB,
-            '§§adminEmail§§': config.adminEmail,
-            '§§pwAdmin§§': config.pwAdmin
-        };
-        // validate label
-        let validLabel = /^[a-z_]{1,10}$/.test(config.label);
-        if (!validLabel){
-            throw new Error('label must be shorter than 10 characters and contain lowercase letters and underscores only');
-        }
-        
-        let dockerComposeContent = dockerComposeTemplateContent;
-        
-        for (let entry in dockerComposeReplacements) {
-            dockerComposeContent = dockerComposeContent.replace(
-                new RegExp(entry, 'g'),
-            dockerComposeReplacements[entry]
+    // validate label
+    let validLabel = /^[a-z_]{1,10}$/.test(config.label);
+    if (!validLabel){
+        throw new Error('label must be shorter than 10 characters and contain lowercase letters and underscores only');
+    }
+
+    // docker compose file
+    const dockerComposeReplacements = {
+        '§§label§§': config.label,
+        '§§name§§': config.name,
+        '§§url§§': 'https://' + config.url,
+        '§§instanceCounter§§': config.instanceCounter,
+        '§§portCounter3306§§': 3306 + config.instanceCounter,
+        '§§portCounter80§§': 8080 + config.instanceCounter,
+        '§§portCounter8055§§': 8055 + config.instanceCounter,
+        '§§pwRoot§§': config.pwRoot,
+        '§§pwMariaDB§§': config.pwMariaDB,
+        '§§adminEmail§§': config.adminEmail,
+        '§§pwAdmin§§': config.pwAdmin
+    };
+
+    let dockerComposeContent = dockerComposeTemplateContent;
+    
+    for (let entry in dockerComposeReplacements) {
+    dockerComposeContent = dockerComposeContent.replace(
+        new RegExp(entry, 'g'),
+        dockerComposeReplacements[entry]
         );
     }
-    
+        
     fs.writeFileSync(
         path.join(projectDirPath, 'docker-compose.yml'),
         dockerComposeContent
     );
+    // apache config file
+    const apacheConfigReplacements = {
+        '§§url§§': config.url,
+        '§§log§§': config.url.replace(/\./g, '_'),
+        '§§port8085§§': 8085 + config.instanceCounter,
+        '§§port8060§§': 8060 + config.instanceCounter,
+    };
+
+    // step 1: pre certbot
+
+    let apacheConfigStep1Content = apacheConfigTemplateStep1Content;
+    
+    for (let entry in apacheConfigReplacements) {
+        apacheConfigStep1Content = apacheConfigStep1Content.replace(
+            new RegExp(entry, 'g'),
+            apacheConfigReplacements[entry]
+        );
+    }
+    fs.writeFileSync(
+        path.join(projectDirPath, 'Step-1', `${config.url}.conf`),
+        apacheConfigStep1Content
+    );
+
+    // step 2: post certbot
+    let apacheConfigStep2Content = apacheConfigTemplateStep2Content;
+    
+    for (let entry in apacheConfigReplacements) {
+        apacheConfigStep2Content = apacheConfigStep2Content.replace(
+            new RegExp(entry, 'g'),
+            apacheConfigReplacements[entry]
+        );
+    }
+    fs.writeFileSync(
+        path.join(projectDirPath, 'Step-2', `${config.url}.conf`),
+        apacheConfigStep2Content
+    );
+
+
     console.log('results see in: ', projectDirPath);
     console.log('docker-compose.yml created');
+    console.log('apache config, Step 1, created');
+    console.log('apache config, Step 2, created');
 } catch (error) {
     console.log('error', error);
 }
