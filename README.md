@@ -8,7 +8,7 @@ This tool creates all config files and console commands necessary to a deploy a 
 npm i
 ```
 
-Rename /config/project-config-sample-data into /config/project.js and change data for your project. Make sure that the counter variables that are used to generate unique instance-specific variable names and port designations do not conflict with existing values of instances already running on the server you want to deploy to.
+Rename /config/project-config-sample-data into /config/project-config.js and change data for your project. Make sure that the counter variables that are used to generate unique instance-specific variable names and port designations do not conflict with existing values of instances already running on the server you want to deploy to.
 
 ```bash
 node app.js
