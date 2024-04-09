@@ -1,0 +1,83 @@
+version: "3"
+
+# wi-archiv.bua-dns.de
+
+services:
+  directus_db_1:
+    container_name: directus_db_1
+    image: mariadb:latest
+    restart: unless-stopped
+    ports:
+      - 3307:3306
+    volumes:
+      - directus_db_1:/var/lib/mysql
+    networks:
+      - directus_network_1
+    environment:
+      MARIADB_ROOT_PASSWORD: GEHEIM
+      MARIADB_USER: directus
+      MARIADB_PASSWORD: GEHEIM
+      MARIADB_DATABASE: directus
+  directus_pma_1:
+    container_name: directus_pma_1
+    image: phpmyadmin
+    restart: unless-stopped
+    ports:
+      - 8081:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=directus_db_1
+      - PMA_PORT=3306
+      # - PMA_ABSOLUTE_URI=https://wi-archiv.bua-dns.de/phpmyadmin/
+    networks:
+      - directus_network_1
+  # directus_cache_1:
+  #   container_name: directus_cache_1
+  #   image: redis:latest
+  #   restart: unless-stopped
+  #   networks:
+  #     - directus_network_1
+  directus_1:
+    container_name: directus_1
+    image: directus/directus:latest
+    restart: unless-stopped
+    ports:
+      - 8055:8055
+    volumes:
+      - ./data/uploads:/directus/uploads
+      - ./data/extensions:/directus/extensions
+    networks:
+      - directus_network_1
+    depends_on:
+      # - directus_cache_1
+      - directus_db_1
+    environment:
+      KEY: "255d861b-5ea1-5996-9aa3-922530ec40b1"
+      SECRET: "6116487b-cda1-52c2-b5b5-c8022c45e263"
+
+      DB_CLIENT: "mysql"
+      DB_HOST: "directus_db_1"
+      DB_PORT: "3306"
+      DB_DATABASE: "directus"
+      DB_USER: "directus"
+      DB_PASSWORD: "GEHEIM"
+
+      CACHE_ENABLED: "false"
+      # CACHE_STORE: "redis"
+      # CACHE_REDIS: "redis://cache1:6379"
+
+      ADMIN_EMAIL: "viktor@grandgeorg.de"
+      ADMIN_PASSWORD: "GEHEIM"
+
+      CORS_ENABLED: "true"
+      CORS_ORIGIN: "*"
+      ACCESS_TOKEN_TTL: "20160m"
+
+      # Make sure to set this in production
+      # (see https://docs.directus.io/self-hosted/config-options/#general)
+      # PUBLIC_URL: "https://wi-archiv.bua-dns.de"
+
+networks:
+  directus_network_1:
+volumes:
+  directus_db_1:
