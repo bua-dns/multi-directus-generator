@@ -18,6 +18,11 @@ const rootPath = process.cwd();
 const projectDirPath = path.join(rootPath, 'output', config.url);
 
 try {
+    if (!fs.existsSync(path.join(rootPath, 'output'))) {
+        fs.mkdir(path.join(rootPath, 'output'), (error) => {
+            if (error) console.log('mkdir error', error)
+        });
+    }
     if(!fs.existsSync(projectDirPath)) {
         fs.mkdir(projectDirPath, (error) => {
             if (error) console.log('mkdir error', error)
