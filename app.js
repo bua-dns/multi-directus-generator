@@ -9,7 +9,7 @@ DEV: Work in progress
 
 import fs from 'fs';
 import path from 'path';
-import { config } from './config/project-template.js';
+import { config } from './config/project-config.js';
 
 
 // create project output folders
