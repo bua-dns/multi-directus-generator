@@ -4,7 +4,15 @@ This tool creates all config files and console commands necessary to a deploy a 
 
 ## Usage
 
+```bash
+npm i
+```
+
 Modify the details in /config/project-template for the new project. Make sure that the counter variables that are used to generate unique instance-specific variable names and port designations do not conflict with existing values of instances already running on the server you want to deploy to.
+
+```bash
+node app.js
+```
 
 ## Prerequisits
 
