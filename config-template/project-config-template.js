@@ -3,7 +3,7 @@
 Configuration for project setup
 */
 
-export default {
+export const config = {
     label: '',
     name: '',
     url: '',
