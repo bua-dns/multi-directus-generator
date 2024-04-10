@@ -51,6 +51,10 @@ try {
         path.join(process.cwd(), '/templates/template-step-2.conf'),
         'utf8'
     );
+    const instructionsTemplateContent = fs.readFileSync(
+        path.join(process.cwd(), '/templates/instructions.md'),
+        'utf8'
+    );
         
     // validate label
     let validLabel = /^[a-z_]{1,11}$/.test(config.label);
@@ -122,7 +126,24 @@ try {
         path.join(projectDirPath, 'Step-2', `${config.url}.conf`),
         apacheConfigStep2Content
     );
-
+    
+    // instructions
+    
+    const instructionsReplacements = {
+        '§§url§§': config.url
+    };
+    let instructions = instructionsTemplateContent;
+    
+    for (let entry in instructionsReplacements) {
+        instructions = instructionsTemplateContent.replace(
+            new RegExp(entry, 'g'),
+            instructionsReplacements[entry]
+        );
+    }
+    fs.writeFileSync(
+        path.join(projectDirPath, 'instructions.md'),
+        instructions
+    );
 
     console.log('results see in: ', projectDirPath);
     console.log('docker-compose.yml created');
@@ -131,9 +152,6 @@ try {
 } catch (error) {
     console.log('error', error);
 }
-
-
-
 
 //// placeholders for docker-compose.yml
 

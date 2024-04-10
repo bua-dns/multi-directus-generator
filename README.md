@@ -25,9 +25,6 @@ export const config = {
 ```
 Then run app.js
 
-```bash
-node app.js
-```
 The script creates a subfolder of /output named like the given url. There you will find all necessary config files, console commands and instructions for the deployment of the docker container that runs your Directus instance.
 
 ## Errors, Problems
