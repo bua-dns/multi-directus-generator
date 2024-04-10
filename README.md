@@ -39,7 +39,7 @@ The "label" given in project-config.js is used as part of variable names and has
 
 If you provide a non-valid label, the script will throw an error.
 
-The "url" must correspond to the public url the Directus instance will run at. Make sure that the DNS records of this (sub) domain points to the server you want to deploy to.
+The "url" must correspond to the public url the Directus instance will run at. Make sure that the DNS records of this (sub) domain points to the server you want to deploy to. Format: sub.your-domain.org (without https://)
 
 The "instanceCounter" value has to be unique for each instance you are deploying to your server. Values can range from 1 to 150.
 
