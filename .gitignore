@@ -44,7 +44,8 @@ secrets.json
 coverage/
 
 # Ignore files generated during documentation generation
-docs/
+# Make directory available for  GitHub Pages documentation
+# docs/
 
 # Ignore files generated during code analysis
 .eslintcache
