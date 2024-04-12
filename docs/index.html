@@ -1,0 +1,466 @@
+<!DOCTYPE html><html lang="de"><head><title>Docker Multi-Instanz Setup Directus</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="assets/css/style.min.css"><link rel="stylesheet" href="assets/css/prism.min.css"><script src="assets/js/clipboard.min.js"></script><script src="assets/js/prism.js"></script><script src="assets/js/raphael.min.js"></script><script src="assets/js/flowchart.min.js"></script><script src="assets/js/app.min.js"></script><script src="meta.js"></script><link rel="icon" type="image/x-icon" href="assets/img/icons/favicon.ico"><link rel="icon" type="image/svg+xml" href="assets/img/icons/favicon.svg"><link rel="apple-touch-icon" sizes="192x192" href="assets/img/icons/favicon-192x192.png"><link rel="apple-touch-icon" sizes="512x512" href="assets/img/icons/favicon-512x512.png"></head><body><div class="navbar"><a class="navbar__brand" href="https://www.berlin-university-alliance.de/index.html"><span class="brand">BUA</span><span class="brand-second">DNS</span></a><div class="navbar__controls"><button class="btn-tag-nav navitem" id="open-tag-navigation" aria-label="Tag-Navigation öffnen" title="Tag-Navigation öffnen" role="button"><svg class="bi bi-tags" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M3 2v4.586l7 7L14.586 9l-7-7H3zM2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586V2z"></path><path d="M5.5 5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm0 1a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM1 7.086a1 1 0 0 0 .293.707L8.75 15.25l-.043.043a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 0 7.586V3a1 1 0 0 1 1-1v5.086z"></path></svg><span class="navitem-title">Tag Navigator</span></button><button class="theme-toggle" aria-label="Wechseln Sie zwischen hellen und dunklen Thema" title="Wechseln Sie zwischen hellen und dunklen Thema"></button><button class="burger" aria-expanded="false" aria-label="navigation menu"><span class="burger__line burger__line-1" aria-hidden="true" focusable="false"></span><span class="burger__line burger__line-2" aria-hidden="true" focusable="false"></span><span class="burger__line burger__line-3" aria-hidden="true" focusable="false"></span></button></div></div><nav class="navigation-drawer" aria-label="Main menu"><h3 class="nav-title text-center">Inhaltsverzeichnis</h3><div class="toc"><div class="table-of-contents"><ul><li><a href="#t-docker-multi-instanz-setup">Docker Multi-Instanz Setup</a><ul><li><a href="#t-directus--mariadb">Directus &amp; MariaDB</a><ul><li><a href="#t-dateistruktur-auf-server">Dateistruktur auf Server</a></li><li><a href="#t--bsp-container-1">🐳 Bsp. Container 1</a><ul><li><a href="#t-docker-compose-datei">Docker-Compose Datei</a></li><li><a href="#t-container-starten">Container starten</a></li><li><a href="#t-apache-virtualhost-config-datei">Apache-Virtualhost-Config Datei</a></li><li><a href="#t-bugfix-">Bugfix 🐞</a></li><li><a href="#t-endpunkte">Endpunkte</a></li></ul></li><li><a href="#t--directus-test">🧪 Directus Test</a></li><li><a href="#t--bsp-container-2">🐳 Bsp. Container 2</a><ul><li><a href="#t-docker-compose-datei-1">Docker-Compose Datei</a></li><li><a href="#t-container-starten-1">Container starten</a></li><li><a href="#t-apache-virtualhost-config-datei-1">Apache-Virtualhost-Config Datei</a></li><li><a href="#t-bugfix--1">Bugfix 🐞</a></li><li><a href="#t-endpunkte-1">Endpunkte</a></li></ul></li></ul></li><li><a href="#t-datenbank-backup">Datenbank Backup</a><ul><li><a href="#t--backup-skript-erstellen">📦 Backup-Skript erstellen</a></li><li><a href="#t-skript-in-crontab-eintragen">Skript in crontab eintragen</a></li></ul></li></ul></li></ul></div></div><div class="sitenav"><h3 class="nav-title text-center">Navigation</h3><ul><li><a class="active" href="index.html">Docker Multi-Instanz Setup</a></li><li><a href="docker.html">Docker Cheat Sheet</a></li></ul></div></nav><main class="page"><div class="mtime">letzte Aktualisierung Donnerstag, 11. April 2024 um 14:54:30 Uhr</div><div class="content"><h1 class="text-center" id="t-docker-multi-instanz-setup" tabindex="-1"><a class="header-anchor" href="#t-docker-multi-instanz-setup">Docker Multi-Instanz Setup</a></h1>
+<hr>
+<h2 id="t-directus--mariadb" tabindex="-1"><a class="header-anchor" href="#t-directus--mariadb">Directus &amp; MariaDB</a></h2>
+<h3 id="t-dateistruktur-auf-server" tabindex="-1"><a class="header-anchor" href="#t-dateistruktur-auf-server">Dateistruktur auf Server</a></h3>
+<pre class="language-filetree" id="codeblock-10"><code> 🖿 /etc/apache2/
+  ┊
+  ├🗁 sites-available
+  │ ├🗏 helbing-db.bua-dns.de.conf
+  │ └🗏 wi-archiv.bua-dns.de.conf
+  ┊
+  ┊
+ 🖿 /var/www/
+  ┊
+  ├🗁 helbing-db.bua-dns.de
+  │ ├🗁 data
+  │ │ ├🗁 database
+  │ │ ├🗁 extensions
+  │ │ └🗁 uploads
+  │ └🗏 docker-compose.yml
+  ┊
+  ├🗁 wi-archiv.bua-dns.de
+  │ ├🗁 data
+  │ │ ├🗁 database
+  │ │ ├🗁 extensions
+  │ │ └🗁 uploads
+  ┊ └🗏 docker-compose.yml
+
+</code></pre><hr>
+<h3 class="text-center" id="t--bsp-container-1" tabindex="-1"><a class="header-anchor" href="#t--bsp-container-1">🐳 Bsp. Container 1</a></h3>
+<hr>
+<ul>
+<li>Domain: <a href="http://wi-archiv.bua-dns.de">wi-archiv.bua-dns.de</a></li>
+<li>Docker-Compose Datei: <code>/var/www/wi-archiv.bua-dns.de/docker-compose.yml</code></li>
+<li>Apache-Virtualhost-Config Datei: <code>/etc/apache2/wi-archiv.bua-dns.de.conf</code></li>
+</ul>
+<h4 id="t-docker-compose-datei" tabindex="-1"><a class="header-anchor" href="#t-docker-compose-datei">Docker-Compose Datei</a></h4>
+<h5 id="t-docker-composeyml" tabindex="-1"><a class="header-anchor" href="#t-docker-composeyml"><code>docker-compose.yml</code></a></h5>
+<p>Hier wird davon ausgegangen, dass die Domain <code>wi-archiv.bua-dns.de</code> auf die IP-Adresse des Servers zeigt.</p>
+
+            <div class="custom-conatiner warning" tabindex="0">
+              <div class="custom-conatiner-title warning-title"> ⚠️ Docker Compose V2</div>
+              <div class="custom-conatiner-body warning-body">
+<p>Die YML-Datei ist für <strong>Docker Compose V2</strong> geschrieben - für eine Migration zu Compose V2 siehe <a href="https://docs.docker.com/compose/migrate/">Migrate to Compose V2</a>.</p>
+<p>Bitte beachten, dass in V2 Service-Container Namen mit Bindestrichen als Trennzeichen und nicht mit Unterstrichen geschrieben werden.<br>
+Unter anderem werden die Container-Namen auch als Hostnamen verwendet. In Hostnamen sind Bindestriche erlaubt, Unterstriche jedoch nicht.<br>
+(The use of underscores in hostnames violates RFC 1123’s valid defined characters for a domain name.)</p>
+</div>
+</div>
+<pre class="line-numbers language-yml" data-line="2-3,7,9,11,17-18,22,25,27,29,30-31,35,37-38,42,47,49-50,58,66,80,83,85" id="codeblock-50"><code>services:
+  directus-db-1:
+    container_name: directus-db-1
+    image: mariadb:latest
+    restart: unless-stopped
+    ports:
+      - 3307:3306
+    volumes:
+      - directus-db-vol-1:/var/lib/mysql
+    networks:
+      - directus-network-1
+    environment:
+      MARIADB_ROOT_PASSWORD: GEHEIM
+      MARIADB_USER: directus
+      MARIADB_PASSWORD: GEHEIM
+      MARIADB_DATABASE: directus
+  directus-pma-1:
+    container_name: directus-pma-1
+    image: phpmyadmin
+    restart: unless-stopped
+    ports:
+      - 8081:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=directus-db-1
+      - PMA_PORT=3306
+      # - PMA_ABSOLUTE_URI=https://wi-archiv.bua-dns.de/phpmyadmin/
+    networks:
+      - directus-network-1
+  directus-cache-1:
+    container_name: directus-cache-1
+    image: redis:latest
+    restart: unless-stopped
+    networks:
+      - directus-network-1
+    command: redis-server --save 60 1 --loglevel warning --requirepass GEHEIM
+  directus-1:
+    container_name: directus-1
+    image: directus/directus:latest
+    restart: unless-stopped
+    ports:
+      - 8055:8055
+    volumes:
+      - ./data/uploads:/directus/uploads
+      - ./data/extensions:/directus/extensions
+    networks:
+      - directus-network-1
+    depends_on:
+      - directus-cache-1
+      - directus-db-1
+    environment:
+      KEY: &quot;88888888-4444-4444-4444-121212121212&quot;
+      SECRET: &quot;88888888-4444-4444-4444-121212121212&quot;
+      # generate with e.g.
+      # openssl rand -hex 16 | sed 's/^\(.\{8\}\)\(.\{4\}\)\(.\{4\}\)\(.\{4\}\)/\1-\2-\3-\4-/'
+
+      DB_CLIENT: &quot;mysql&quot;
+      DB_HOST: &quot;directus-db-1&quot;
+      DB_PORT: &quot;3306&quot;
+      DB_DATABASE: &quot;directus&quot;
+      DB_USER: &quot;directus&quot;
+      DB_PASSWORD: &quot;GEHEIM&quot;
+
+      CACHE_ENABLED: true
+      CACHE_STORE: &quot;redis&quot;
+      REDIS_HOST: &quot;directus-cache-1&quot;
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: &quot;GEHEIM&quot;
+
+      ADMIN_EMAIL: &quot;your@email.here&quot;
+      ADMIN_PASSWORD: &quot;GEHEIM&quot;
+
+      CORS_ENABLED: true
+      CORS_ORIGIN: &quot;*&quot;
+      ACCESS_TOKEN_TTL: &quot;20160m&quot; # 14 days
+
+      # Make sure to set this in production
+      # (see https://docs.directus.io/self-hosted/config-options/#general)
+      
+      # PUBLIC_URL: &quot;https://wi-archiv.bua-dns.de&quot;
+
+networks:
+  directus-network-1:
+volumes:
+  directus-db-vol-1:
+</code></pre>
+            <div class="custom-conatiner line" tabindex="0">
+              <div class="custom-conatiner-title line-title"> ✏ Markierte Zeilen anpassen</div>
+              <div class="custom-conatiner-body line-body">
+<p>In den oben markierten Zeilen jeweils die Domain, den Container-Namen, die Portnummer, das Netzwerk und das Volume anpassen.</p>
+</div>
+</div>
+
+            <div class="custom-conatiner warning" tabindex="0">
+              <div class="custom-conatiner-title warning-title"> ⚠️ Verwendung von Redis</div>
+              <div class="custom-conatiner-body warning-body">
+<p>Wenn Redis als Cache-Store verwendet werden soll, muss auf dem Host unter <code>/etc/sysctl.conf</code> (oder in einer neuen Datei unter <code>/etc/sysctl.d</code>) der Wert <code>vm.overcommit_memory=1</code> gesetzt werden.<br>
+Anschließend muss der Kernel neu geladen werden: <code>sysctl -p</code>, oder der Server neu gestartet werden, oder das Kommando <code>sysctl vm.overcommit_memory=1</code> ausgeführt werden.</p>
+</div>
+</div>
+<h4 id="t-container-starten" tabindex="-1"><a class="header-anchor" href="#t-container-starten">Container starten</a></h4>
+<pre class="command-line language-shell" data-user="root" data-host="mmok-workbench" id="codeblock-64"><code>cd /var/www/wi-archiv.bua-dns.de
+docker-compose up -d
+</code></pre><h4 id="t-apache-virtualhost-config-datei" tabindex="-1"><a class="header-anchor" href="#t-apache-virtualhost-config-datei">Apache-Virtualhost-Config Datei</a></h4>
+<h5 id="t-wi-archivbua-dnsdeconf" tabindex="-1"><a class="header-anchor" href="#t-wi-archivbua-dnsdeconf"><code>wi-archiv.bua-dns.de.conf</code></a></h5>
+<pre class="line-numbers language-apacheconf" data-line="3,6,10-11,16,28-29,36-37,39-40,42-43" id="codeblock-71"><code>&lt;VirtualHost *:80&gt;
+    ServerAdmin webmaster@localhost
+    ServerName wi-archiv.bua-dns.de
+    # ServerAlias www.wi-archiv.bua-dns.de
+
+    Redirect permanent / https://wi-archiv.bua-dns.de/
+
+    DocumentRoot /var/www/html
+
+    ErrorLog ${APACHE_LOG_DIR}/wi-archiv_bua-dns_error.log
+    CustomLog ${APACHE_LOG_DIR}/wi-archiv_bua-dns_access.log combined
+&lt;/VirtualHost&gt;
+&lt;IfModule mod_ssl.c&gt;
+    &lt;VirtualHost *:443&gt;
+        ServerAdmin webmaster@localhost
+        ServerName wi-archiv.bua-dns.de
+        DocumentRoot /var/www/html
+
+        SSLEngine on
+        SSLProtocol All -SSLv2 -SSLv3 -TLSv1 -TLSv1.1
+        SSLCipherSuite ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA:ECDHE-ECDSA-AES128-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA256
+        SSLHonorCipherOrder on
+        SSLOptions +StrictRequire
+        Header always set Strict-Transport-Security &quot;max-age=31536000; includeSubDomains; preload&quot;
+
+        # Header set Access-Control-Allow-Origin &quot;*&quot;
+
+        SSLCertificateKeyFile /etc/letsencrypt/live/wi-archiv.bua-dns.de/privkey.pem
+        SSLCertificateFile  /etc/letsencrypt/live/wi-archiv.bua-dns.de/fullchain.pem
+
+        Protocols h2 http/1.1
+
+        # Proxy forwarding
+        ProxyPass /.well-known/acme-challenge !
+
+        ProxyPass /phpmyadmin/  http://localhost:8080/
+        ProxyPassReverse /phpmyadmin/ http://localhost:8080/
+
+        ProxyPass /  http://localhost:8055/
+        ProxyPassReverse / http://localhost:8055/
+
+        ErrorLog ${APACHE_LOG_DIR}/wi-archiv_bua-dns_error.log
+        CustomLog ${APACHE_LOG_DIR}/wi-archiv_bua-dns_access.log combined
+
+        &lt;FilesMatch &quot;\.(phtml|php)$&quot;&gt;
+            SSLOptions +StdEnvVars
+        &lt;/FilesMatch&gt;
+
+    &lt;/VirtualHost&gt;
+&lt;/IfModule&gt;
+</code></pre>
+            <div class="custom-conatiner line" tabindex="0">
+              <div class="custom-conatiner-title line-title"> ✏ Markierte Zeilen anpassen</div>
+              <div class="custom-conatiner-body line-body">
+<p>In den oben markierten Zeilen jeweils die Domain, und die Portnummer anpassen.</p>
+</div>
+</div>
+<h4 id="t-bugfix-" tabindex="-1"><a class="header-anchor" href="#t-bugfix-">Bugfix 🐞</a></h4>
+<p><strong>Berechtigungen des directus docker services</strong></p>
+
+            <div class="custom-conatiner warning">
+              <div class="custom-conatiner-body warning-body">
+<p>Zunächst prüfen, ob der Bugfix notwendig ist!</p>
+</div>
+</div>
+<p>Der directus container <code>directus-1</code> muss laufen, überprüfen mit:</p>
+<pre class="command-line language-shell" data-user="root" data-host="mmok-workbench" data-output="2-6" id="codeblock-91"><code>docker ps
+CONTAINER ID   IMAGE                      COMMAND                  CREATED       STATUS       PORTS
+a8fcf79b0ab2   directus/directus:latest   &quot;docker-entrypoint.s…&quot;   2 weeks ago   Up 2 weeks   0.0.0.0:8055-&gt;8055/tcp, :::8055-&gt;8055/tcp   directus1
+9da68cd42fa8   mariadb:latest             &quot;docker-entrypoint.s…&quot;   2 weeks ago   Up 2 weeks   0.0.0.0:3307-&gt;3306/tcp, :::3307-&gt;3306/tcp   database1
+65c03b70840a   phpmyadmin                 &quot;/docker-entrypoint.…&quot;   2 weeks ago   Up 2 weeks   0.0.0.0:8080-&gt;80/tcp, :::8080-&gt;80/tcp       phpmyadmin1
+31e3b4950ba9   redis:latest               &quot;docker-entrypoint.s…&quot;   2 weeks ago   Up 2 weeks   6379/tcp                                    cache1
+</code></pre><p>Dann für den Bugfix eingeben:</p>
+<pre class="command-line language-shell" data-user="root" data-host="mmok-workbench" id="codeblock-95"><code>cd /var/www/wi-archiv.bua-dns.de
+docker-compose exec -u root directus-1 chown -R node:node /directus/database /directus/extensions /directus/uploads
+docker-compose restart
+</code></pre><h4 id="t-endpunkte" tabindex="-1"><a class="header-anchor" href="#t-endpunkte">Endpunkte</a></h4>
+<ul>
+<li><a href="https://wi-archiv.bua-dns.de/">Directus Admin-UI: https://wi-archiv.bua-dns.de/</a></li>
+<li><a href="https://wi-archiv.bua-dns.de/phpmyadmin/">PhpMyAdmin: https://wi-archiv.bua-dns.de/phpmyadmin/</a></li>
+<li>Verbindung zur DB über lokalen SQL-Client (Bsp. HeidiSQL)
+<ul>
+<li>Hostname / IP: <strong>78.46.184.60</strong></li>
+<li>Benutzer: <strong>root</strong></li>
+<li>Port: <strong>3307</strong></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 class="text-center" id="t--directus-test" tabindex="-1"><a class="header-anchor" href="#t--directus-test">🧪 Directus Test</a></h3>
+<details><summary>Test: Anmeldung Directus, phpMyAdmin und MariaDB</summary>
+<h5 class="text-center" id="t-angemeldet-und-als-test-first-name-und-last-name-gendert-standardmig-ist-nur-bei-first-name-admin-gesetzt" tabindex="-1"><a class="header-anchor" href="#t-angemeldet-und-als-test-first-name-und-last-name-gendert-standardmig-ist-nur-bei-first-name-admin-gesetzt">Angemeldet und als Test “First Name” und “Last Name” geändert (Standardmäßig ist nur bei First Name “Admin” gesetzt).</a></h5>
+<p><img src="img/001.png" alt="Directus"></p>
+<h5 class="text-center" id="t-testbild-hochgeladen" tabindex="-1"><a class="header-anchor" href="#t-testbild-hochgeladen">Testbild hochgeladen</a></h5>
+<p><img src="img/004.png" alt="Directus"></p>
+<h5 class="text-center" id="t-phpmyadmin" tabindex="-1"><a class="header-anchor" href="#t-phpmyadmin">phpMyAdmin</a></h5>
+<p><img src="img/002.png" alt="phpMyAdmin"></p>
+<h5 class="text-center" id="t-lokler-sql-client-heidisql" tabindex="-1"><a class="header-anchor" href="#t-lokler-sql-client-heidisql">lokler SQL Client (HeidiSQL)</a></h5>
+<p><img src="img/003.png" alt="HeidiSQL"></p>
+</details>
+<hr>
+<h3 class="text-center" id="t--bsp-container-2" tabindex="-1"><a class="header-anchor" href="#t--bsp-container-2">🐳 Bsp. Container 2</a></h3>
+<hr>
+<ul>
+<li>Domain: <a href="http://helbing-db.bua-dns.de">helbing-db.bua-dns.de</a></li>
+<li>Docker-Compose Datei: <code>/var/www/helbing-db.bua-dns.de/docker-compose.yml</code></li>
+<li>Apache-Virtualhost-Config Datei: <code>/etc/apache2/helbing-db.bua-dns.de.conf</code></li>
+</ul>
+<h4 id="t-docker-compose-datei-1" tabindex="-1"><a class="header-anchor" href="#t-docker-compose-datei-1">Docker-Compose Datei</a></h4>
+<h5 id="t-docker-composeyml-1" tabindex="-1"><a class="header-anchor" href="#t-docker-composeyml-1"><code>docker-compose.yml</code></a></h5>
+<pre class="line-numbers language-yml" data-line="2-3,7,9,11,17-18,22,25,27,29,30-31,35,37-38,42,47,49-50,58,66,80,83,85" id="codeblock-191"><code>services:
+  directus-db-2:
+    container_name: directus-db-2
+    image: mariadb:latest
+    restart: unless-stopped
+    ports:
+      - 3307:3306
+    volumes:
+      - directus-db-vol-2:/var/lib/mysql
+    networks:
+      - directus-network-2
+    environment:
+      MARIADB_ROOT_PASSWORD: GEHEIM
+      MARIADB_USER: directus
+      MARIADB_PASSWORD: GEHEIM
+      MARIADB_DATABASE: directus
+  directus-pma-2:
+    container_name: directus-pma-2
+    image: phpmyadmin
+    restart: unless-stopped
+    ports:
+      - 8081:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=directus-db-2
+      - PMA_PORT=3306
+      # - PMA_ABSOLUTE_URI=https://helbing-db.bua-dns.de/phpmyadmin/
+    networks:
+      - directus-network-2
+  directus-cache-2:
+    container_name: directus-cache-2
+    image: redis:latest
+    restart: unless-stopped
+    networks:
+      - directus-network-2
+    command: redis-server --save 60 1 --loglevel warning --requirepass GEHEIM
+  directus-2:
+    container_name: directus-2
+    image: directus/directus:latest
+    restart: unless-stopped
+    ports:
+      - 8055:8055
+    volumes:
+      - ./data/uploads:/directus/uploads
+      - ./data/extensions:/directus/extensions
+    networks:
+      - directus-network-2
+    depends_on:
+      - directus-cache-2
+      - directus-db-2
+    environment:
+      KEY: &quot;88888888-4444-4444-4444-121212121212&quot;
+      SECRET: &quot;88888888-4444-4444-4444-121212121212&quot;
+      # generate with e.g.
+      # openssl rand -hex 16 | sed 's/^\(.\{8\}\)\(.\{4\}\)\(.\{4\}\)\(.\{4\}\)/\1-\2-\3-\4-/'
+
+      DB_CLIENT: &quot;mysql&quot;
+      DB_HOST: &quot;directus-db-2&quot;
+      DB_PORT: &quot;3306&quot;
+      DB_DATABASE: &quot;directus&quot;
+      DB_USER: &quot;directus&quot;
+      DB_PASSWORD: &quot;GEHEIM&quot;
+
+      CACHE_ENABLED: true
+      CACHE_STORE: &quot;redis&quot;
+      REDIS_HOST: &quot;directus-cache-2&quot;
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: &quot;GEHEIM&quot;
+
+      ADMIN_EMAIL: &quot;your@email.here&quot;
+      ADMIN_PASSWORD: &quot;GEHEIM&quot;
+
+      CORS_ENABLED: true
+      CORS_ORIGIN: &quot;*&quot;
+      ACCESS_TOKEN_TTL: &quot;20160m&quot; # 14 days
+
+      # Make sure to set this in production
+      # (see https://docs.directus.io/self-hosted/config-options/#general)
+
+      # PUBLIC_URL: &quot;https://helbing-db.bua-dns.de&quot;
+
+networks:
+  directus-network-2:
+volumes:
+  directus-db-vol-2:
+</code></pre>
+            <div class="custom-conatiner line" tabindex="0">
+              <div class="custom-conatiner-title line-title"> ✏ Markierte Zeilen anpassen</div>
+              <div class="custom-conatiner-body line-body">
+<p>In den oben markierten Zeilen jeweils die Domain, den Container-Namen, die Portnummer und das Netzwerk anpassen.</p>
+</div>
+</div>
+<h4 id="t-container-starten-1" tabindex="-1"><a class="header-anchor" href="#t-container-starten-1">Container starten</a></h4>
+<pre class="command-line language-shell" data-user="root" data-host="mmok-workbench" id="codeblock-200"><code>cd /var/www/helbing-db.bua-dns.de
+docker-compose up -d
+</code></pre><h4 id="t-apache-virtualhost-config-datei-1" tabindex="-1"><a class="header-anchor" href="#t-apache-virtualhost-config-datei-1">Apache-Virtualhost-Config Datei</a></h4>
+<h5 id="t-helbing-dbbua-dnsdeconf" tabindex="-1"><a class="header-anchor" href="#t-helbing-dbbua-dnsdeconf"><code>helbing-db.bua-dns.de.conf</code></a></h5>
+<pre class="line-numbers language-apacheconf" data-line="3,6,10-11,16,28-29,36-37,39-40,42-43" id="codeblock-207"><code>&lt;VirtualHost *:80&gt;
+    ServerAdmin webmaster@localhost
+    ServerName helbing-db.bua-dns.de
+    # ServerAlias www.helbing-db.bua-dns.de
+
+    Redirect permanent / https://helbing-db.bua-dns.de/
+
+    DocumentRoot /var/www/html
+
+    ErrorLog ${APACHE_LOG_DIR}/helbing-db_bua-dns_error.log
+    CustomLog ${APACHE_LOG_DIR}/helbing-db_bua-dns_access.log combined
+&lt;/VirtualHost&gt;
+&lt;IfModule mod_ssl.c&gt;
+    &lt;VirtualHost *:443&gt;
+        ServerAdmin webmaster@localhost
+        ServerName helbing-db.bua-dns.de
+        DocumentRoot /var/www/html
+
+        SSLEngine on
+        SSLProtocol All -SSLv2 -SSLv3 -TLSv1 -TLSv1.1
+        SSLCipherSuite ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA:ECDHE-ECDSA-AES128-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA256
+        SSLHonorCipherOrder on
+        SSLOptions +StrictRequire
+        Header always set Strict-Transport-Security &quot;max-age=31536000; includeSubDomains; preload&quot;
+
+        # Header set Access-Control-Allow-Origin &quot;*&quot;
+
+        SSLCertificateKeyFile /etc/letsencrypt/live/helbing-db.bua-dns.de/privkey.pem
+        SSLCertificateFile  /etc/letsencrypt/live/helbing-db.bua-dns.de/fullchain.pem
+
+        Protocols h2 http/1.1
+
+        # Proxy forwarding
+        ProxyPass /.well-known/acme-challenge !
+
+        ProxyPass /phpmyadmin/  http://localhost:8081/
+        ProxyPassReverse /phpmyadmin/ http://localhost:8081/
+
+        ProxyPass /  http://localhost:8056/
+        ProxyPassReverse / http://localhost:8056/
+
+        ErrorLog ${APACHE_LOG_DIR}/helbing-db_bua-dns_error.log
+        CustomLog ${APACHE_LOG_DIR}/helbing-db_bua-dns__access.log combined
+
+        &lt;FilesMatch &quot;\.(phtml|php)$&quot;&gt;
+            SSLOptions +StdEnvVars
+        &lt;/FilesMatch&gt;
+
+    &lt;/VirtualHost&gt;
+&lt;/IfModule&gt;
+</code></pre>
+            <div class="custom-conatiner line" tabindex="0">
+              <div class="custom-conatiner-title line-title"> ✏ Markierte Zeilen anpassen</div>
+              <div class="custom-conatiner-body line-body">
+<p>In den oben markierten Zeilen jeweils die Domain, und die Portnummer anpassen.</p>
+</div>
+</div>
+<h4 id="t-bugfix--1" tabindex="-1"><a class="header-anchor" href="#t-bugfix--1">Bugfix 🐞</a></h4>
+<p><strong>Berechtigungen des directus docker services</strong></p>
+<p>Der directus container <code>directus2</code> muss laufen, überprüfen mit:</p>
+<pre class="command-line language-shell" data-user="root" data-host="mmok-workbench" data-output="2-6" id="codeblock-222"><code>docker ps
+CONTAINER ID   IMAGE                      COMMAND                  CREATED       STATUS       PORTS
+e6af8f15f42f   directus/directus:latest   &quot;docker-entrypoint.s…&quot;   2 weeks ago   Up 2 weeks   0.0.0.0:8056-&gt;8055/tcp, :::8056-&gt;8055/tcp   directus2
+de6793d2190b   mariadb:latest             &quot;docker-entrypoint.s…&quot;   2 weeks ago   Up 2 weeks   0.0.0.0:3308-&gt;3306/tcp, :::3308-&gt;3306/tcp   database2
+81e89e224cb7   redis:latest               &quot;docker-entrypoint.s…&quot;   2 weeks ago   Up 2 weeks   6379/tcp                                    cache2
+1b7b26568b2b   phpmyadmin                 &quot;/docker-entrypoint.…&quot;   2 weeks ago   Up 2 weeks   0.0.0.0:8081-&gt;80/tcp, :::8081-&gt;80/tcp       phpmyadmin2
+</code></pre><p>Dann eingeben:</p>
+<pre class="command-line language-shell" data-user="root" data-host="mmok-workbench" id="codeblock-226"><code>cd /var/www/helbing-db.bua-dns.de
+docker-compose exec -u root directus2 chown -R node:node /directus/database /directus/extensions /directus/uploads
+docker-compose restart
+</code></pre><h4 id="t-endpunkte-1" tabindex="-1"><a class="header-anchor" href="#t-endpunkte-1">Endpunkte</a></h4>
+<ul>
+<li><a href="https://helbing-db.bua-dns.de/">Directus Admin-UI: https://helbing-db.bua-dns.de/</a></li>
+<li><a href="https://helbing-db.bua-dns.de/phpmyadmin/">PhpMyAdmin: https://helbing-db.bua-dns.de/phpmyadmin/</a></li>
+<li>Verbindung zur DB über lokalen SQL-Client
+<ul>
+<li>Hostname / IP: <strong>78.46.184.60</strong></li>
+<li>Benutzer: <strong>root</strong></li>
+<li>Port: <strong>3308</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="t-datenbank-backup" tabindex="-1"><a class="header-anchor" href="#t-datenbank-backup">Datenbank Backup</a></h2>
+<h3 id="t--backup-skript-erstellen" tabindex="-1"><a class="header-anchor" href="#t--backup-skript-erstellen">📦 Backup-Skript erstellen</a></h3>
+<p>Skript erstellen unter z.B.: <code>/mnt/volume-fsn1-1/backup/backup-docker-db.sh</code></p>
+<pre class="language-shell" id="codeblock-273"><code>#!/usr/bin/env bash
+
+CURRENTDATE=$(date +&quot;%Y-%m-%d_%H-%M-%S&quot;)
+GZIP=&quot;$(which gzip)&quot;
+BACKUPDIR=&quot;/mnt/volume-fsn1-1/backup/db&quot;
+DAYS_TO_KEEP=7
+CONTAINERS=$(docker ps --format '{{.Names}}:{{.Image}}' | grep 'database' | cut -d&quot;:&quot; -f1)
+
+for CONTAINER in $CONTAINERS
+do
+  MARIADB_ROOT_PASSWORD=$(docker exec $CONTAINER env | grep MARIADB_ROOT_PASSWORD | cut -d&quot;=&quot; -f2)
+  DATABASE=$(docker exec $CONTAINER env | grep MARIADB_DATABASE | cut -d&quot;=&quot; -f2)
+  docker exec $CONTAINER /usr/bin/mariadb-dump --user=root --password=$MARIADB_ROOT_PASSWORD $DATABASE | $GZIP &gt; $BACKUPDIR/$CONTAINER-$CURRENTDATE.sql.gz
+done
+
+find $BACKUPDIR -type f -name &quot;*.gz&quot; -mtime +$DAYS_TO_KEEP -delete;
+</code></pre><p>Backup-Verzeichnis erstellen:</p>
+<pre class="language-shell" id="codeblock-277"><code>mkdir -p /mnt/volume-fsn1-1/backup/db
+</code></pre><h3 id="t-skript-in-crontab-eintragen" tabindex="-1"><a class="header-anchor" href="#t-skript-in-crontab-eintragen">Skript in crontab eintragen</a></h3>
+<pre class="language-shell" id="codeblock-281"><code>ln -s /mnt/volume-fsn1-1/backup/backup-docker-db.sh /etc/cron.daily/backup-docker-db
+</code></pre></div><div class="footer"><a class="brand-link" href="https://www.berlin-university-alliance.de/index.html"><span class="brand">BUA</span><span class="brand-second">DNS</span></a></div></main></body></html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html><html lang="en"><head><title>Docker</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="assets/css/style.min.css"><link rel="stylesheet" href="assets/css/prism.min.css"><script src="assets/js/clipboard.min.js"></script><script src="assets/js/prism.js"></script><script src="assets/js/raphael.min.js"></script><script src="assets/js/flowchart.min.js"></script><script src="assets/js/app.min.js"></script><script src="meta.js"></script><link rel="icon" type="image/x-icon" href="assets/img/icons/favicon.ico"><link rel="icon" type="image/svg+xml" href="assets/img/icons/favicon.svg"><link rel="apple-touch-icon" sizes="192x192" href="assets/img/icons/favicon-192x192.png"><link rel="apple-touch-icon" sizes="512x512" href="assets/img/icons/favicon-512x512.png"></head><body><div class="navbar"><a class="navbar__brand" href="https://www.berlin-university-alliance.de/index.html"><span class="brand">BUA</span><span class="brand-second">DNS</span></a><div class="navbar__controls"><button class="btn-tag-nav navitem" id="open-tag-navigation" aria-label="open tag navigation" title="open tag navigation" role="button"><svg class="bi bi-tags" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M3 2v4.586l7 7L14.586 9l-7-7H3zM2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586V2z"></path><path d="M5.5 5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm0 1a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM1 7.086a1 1 0 0 0 .293.707L8.75 15.25l-.043.043a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 0 7.586V3a1 1 0 0 1 1-1v5.086z"></path></svg><span class="navitem-title">Tag Navigator</span></button><button class="theme-toggle" aria-label="switch between light and dark theme" title="switch between light and dark theme"></button><button class="burger" aria-expanded="false" aria-label="navigation menu"><span class="burger__line burger__line-1" aria-hidden="true" focusable="false"></span><span class="burger__line burger__line-2" aria-hidden="true" focusable="false"></span><span class="burger__line burger__line-3" aria-hidden="true" focusable="false"></span></button></div></div><nav class="navigation-drawer" aria-label="Main menu"><h3 class="nav-title text-center">Table of Contents</h3><div class="toc"><div class="table-of-contents"><ul><li><a href="#t-docker">Docker</a><ul><li><a href="#t-docker-system">Docker system</a><ul><li><a href="#t-show-disk-usage">Show disk usage</a></li><li><a href="#t-prune-unused-data">Prune unused data</a></li><li><a href="#t-prune-all-unused-data">Prune all unused data</a></li></ul></li><li><a href="#t-docker-run">Docker run</a><ul><li><a href="#t-run-a-container">Run a container</a></li><li><a href="#t-run-a-container-with-a-name">Run a container with a name</a></li><li><a href="#t-run-a-container-with-a-name-and-a-volume">Run a container with a name and a volume</a></li><li><a href="#t-run-a-container-with-a-name-and-a-port">Run a container with a name and a port</a></li></ul></li><li><a href="#t-docker-images">Docker Images</a><ul><li><a href="#t-list-docker-images">List Docker Images</a></li><li><a href="#t-remove-docker-image">Remove Docker Image</a></li><li><a href="#t-remove-all-docker-images">Remove All Docker Images</a></li></ul></li><li><a href="#t-docker-containers">Docker Containers</a><ul><li><a href="#t-list-docker-containers">List Docker Containers</a></li><li><a href="#t-remove-docker-container">Remove Docker Container</a></li><li><a href="#t-remove-all-docker-containers">Remove All Docker Containers</a></li><li><a href="#t-stop-docker-container">Stop Docker Container</a></li><li><a href="#t-stop-all-docker-containers">Stop All Docker Containers</a></li><li><a href="#t-start-docker-container">Start Docker Container</a></li></ul></li><li><a href="#t-docker-volumes">Docker Volumes</a><ul><li><a href="#t-list-volumes">List volumes</a></li><li><a href="#t-remove-volume">Remove volume</a></li><li><a href="#t-remove-all-volumes">Remove all volumes</a></li></ul></li><li><a href="#t-docker-inspect">Docker inspect</a><ul><li><a href="#t-inspect-a-container">Inspect a container</a></li><li><a href="#t-inspect-a-volume">Inspect a volume</a></li><li><a href="#t-inspect-a-network">Inspect a network</a></li></ul></li><li><a href="#t-docker-interactive-shell">Docker interactive shell</a><ul><li><a href="#t-start-interactive-shell-in-a-container">Start interactive shell in a container</a></li><li><a href="#t-start-interactive-shell-in-a-container-with-bash---if-bash-is-installed">Start interactive shell in a container with bash - if bash is installed</a></li></ul></li><li><a href="#t-docker-logs">Docker logs</a><ul><li><a href="#t-show-all-logs-and-follow">Show all logs and follow</a></li><li><a href="#t-show-logs-of-a-container">Show logs of a container</a></li><li><a href="#t-show-logs-of-a-container-with-timestamps">Show logs of a container with timestamps</a></li><li><a href="#t-show-logs-of-a-container-with-timestamps-and-follow">Show logs of a container with timestamps and follow</a></li></ul></li><li><a href="#t-docker-stats">Docker stats</a><ul><li><a href="#t-show-stats-of-all-running-containers">Show stats of all running containers</a></li><li><a href="#t-show-stats-of-a-container">Show stats of a container</a></li></ul></li><li><a href="#t-docker-network">Docker network</a><ul><li><a href="#t-list-networks">List networks</a></li><li><a href="#t-remove-network">Remove network</a></li><li><a href="#t-remove-all-networks">Remove all networks</a></li></ul></li><li><a href="#t-docker-compose">Docker-compose</a><ul><li><a href="#t-start-docker-compose">Start docker compose</a></li><li><a href="#t-stop-docker-compose">Stop docker compose</a></li><li><a href="#t-restart-docker-compose">Restart docker compose</a></li><li><a href="#t-show-stats-of-docker-compose">Show stats of docker compose</a></li><li><a href="#t-show-stats-of-a-service-in-docker-compose">Show stats of a service in docker compose</a></li><li><a href="#t-update-docker-compose">Update docker compose</a></li></ul></li><li><a href="#t-docker-compose-logs">Docker-compose logs</a><ul><li><a href="#t-show-all-logs-of-docker-compose-and-follow">Show all logs of docker compose and follow</a></li><li><a href="#t-show-logs-of-a-service-in-docker-compose">Show logs of a service in docker compose</a></li><li><a href="#t-show-logs-of-a-service-in-docker-compose-with-timestamps">Show logs of a service in docker compose with timestamps</a></li><li><a href="#t-show-logs-of-a-service-in-docker-compose-with-timestamps-and-follow">Show logs of a service in docker compose with timestamps and follow</a></li></ul></li><li><a href="#t-docker-compose-interactive-shell">Docker-compose interactive shell</a><ul><li><a href="#t-start-interactive-shell-in-a-service-of-docker-compose">Start interactive shell in a service of docker compose</a></li><li><a href="#t-start-interactive-shell-in-a-service-of-docker-compose-with-bash---if-bash-is-installed">Start interactive shell in a service of docker compose with bash - if bash is installed</a></li></ul></li><li><a href="#t-dockerfile-build">Dockerfile Build</a><ul><li><a href="#t-build-dockerfile">Build Dockerfile</a></li><li><a href="#t-build-dockerfile-with-a-tag">Build Dockerfile with a tag</a></li><li><a href="#t-build-dockerfile-with-a-tag-and-a-build-argument">Build Dockerfile with a tag and a build argument</a></li><li><a href="#t-build-dockerfile-with-a-tag-and-a-build-argument-from-a-file">Build Dockerfile with a tag and a build argument from a file</a></li></ul></li><li><a href="#t-dockerfile">Dockerfile</a><ul><li><a href="#t-dockerfile-example">Dockerfile example</a></li></ul></li><li><a href="#t-bind-mounts-and-volumes">Bind Mounts and Volumes</a><ul><li><a href="#t-bind-mounts-and-volumes-comparison-table">Bind Mounts and volumes comparison table</a></li></ul></li></ul></li></ul></div></div><div class="sitenav"><h3 class="nav-title text-center">Navigation</h3><ul><li><a href="index.html">Docker Multi-Instanz Setup</a></li><li><a class="active" href="docker.html">Docker Cheat Sheet</a></li></ul></div></nav><main class="page"><div class="mtime">Last Update Thursday, March 28, 2024 at 9:43:57 AM</div><div class="content"><h1 id="t-docker" tabindex="-1"><a class="header-anchor" href="#t-docker">Docker</a></h1>
+<h2 id="t-docker-system" tabindex="-1"><a class="header-anchor" href="#t-docker-system">Docker system</a></h2>
+<h3 id="t-show-disk-usage" tabindex="-1"><a class="header-anchor" href="#t-show-disk-usage">Show disk usage</a></h3>
+<pre class="language-sh" id="codeblock-9"><code>docker system df
+</code></pre><h3 id="t-prune-unused-data" tabindex="-1"><a class="header-anchor" href="#t-prune-unused-data">Prune unused data</a></h3>
+<pre class="language-sh" id="codeblock-13"><code>docker system prune
+</code></pre><h3 id="t-prune-all-unused-data" tabindex="-1"><a class="header-anchor" href="#t-prune-all-unused-data">Prune all unused data</a></h3>
+<pre class="language-sh" id="codeblock-17"><code>docker system prune -a
+</code></pre><h2 id="t-docker-run" tabindex="-1"><a class="header-anchor" href="#t-docker-run">Docker run</a></h2>
+<h3 id="t-run-a-container" tabindex="-1"><a class="header-anchor" href="#t-run-a-container">Run a container</a></h3>
+<pre class="language-sh" id="codeblock-24"><code>docker run &lt;image_name&gt;
+</code></pre><h3 id="t-run-a-container-with-a-name" tabindex="-1"><a class="header-anchor" href="#t-run-a-container-with-a-name">Run a container with a name</a></h3>
+<pre class="language-sh" id="codeblock-28"><code>docker run --name &lt;container_name&gt; &lt;image_name&gt;
+</code></pre><h3 id="t-run-a-container-with-a-name-and-a-volume" tabindex="-1"><a class="header-anchor" href="#t-run-a-container-with-a-name-and-a-volume">Run a container with a name and a volume</a></h3>
+<pre class="language-sh" id="codeblock-32"><code>docker run --name &lt;container_name&gt; -v &lt;host_path&gt;:&lt;container_path&gt; &lt;image_name&gt;
+</code></pre><h3 id="t-run-a-container-with-a-name-and-a-port" tabindex="-1"><a class="header-anchor" href="#t-run-a-container-with-a-name-and-a-port">Run a container with a name and a port</a></h3>
+<pre class="language-sh" id="codeblock-36"><code>docker run --name &lt;container_name&gt; -p &lt;host_port&gt;:&lt;container_port&gt; &lt;image_name&gt;
+</code></pre><hr>
+<h2 id="t-docker-images" tabindex="-1"><a class="header-anchor" href="#t-docker-images">Docker Images</a></h2>
+<h3 id="t-list-docker-images" tabindex="-1"><a class="header-anchor" href="#t-list-docker-images">List Docker Images</a></h3>
+<pre class="language-sh" id="codeblock-44"><code>docker images
+</code></pre><h3 id="t-remove-docker-image" tabindex="-1"><a class="header-anchor" href="#t-remove-docker-image">Remove Docker Image</a></h3>
+<pre class="language-sh" id="codeblock-48"><code>docker rmi &lt;image_id&gt;
+</code></pre><h3 id="t-remove-all-docker-images" tabindex="-1"><a class="header-anchor" href="#t-remove-all-docker-images">Remove All Docker Images</a></h3>
+<pre class="language-sh" id="codeblock-52"><code>docker rmi $(docker images -q)
+</code></pre><hr>
+<h2 id="t-docker-containers" tabindex="-1"><a class="header-anchor" href="#t-docker-containers">Docker Containers</a></h2>
+<h3 id="t-list-docker-containers" tabindex="-1"><a class="header-anchor" href="#t-list-docker-containers">List Docker Containers</a></h3>
+<pre class="language-sh" id="codeblock-60"><code>docker ps -a
+</code></pre><h3 id="t-remove-docker-container" tabindex="-1"><a class="header-anchor" href="#t-remove-docker-container">Remove Docker Container</a></h3>
+<pre class="language-sh" id="codeblock-64"><code>docker rm &lt;container_id&gt;
+</code></pre><h3 id="t-remove-all-docker-containers" tabindex="-1"><a class="header-anchor" href="#t-remove-all-docker-containers">Remove All Docker Containers</a></h3>
+<pre class="language-sh" id="codeblock-68"><code>docker rm $(docker ps -a -q)
+</code></pre><h3 id="t-stop-docker-container" tabindex="-1"><a class="header-anchor" href="#t-stop-docker-container">Stop Docker Container</a></h3>
+<pre class="language-sh" id="codeblock-72"><code>docker stop &lt;container_id&gt;
+</code></pre><h3 id="t-stop-all-docker-containers" tabindex="-1"><a class="header-anchor" href="#t-stop-all-docker-containers">Stop All Docker Containers</a></h3>
+<pre class="language-sh" id="codeblock-76"><code>docker stop $(docker ps -a -q)
+</code></pre><h3 id="t-start-docker-container" tabindex="-1"><a class="header-anchor" href="#t-start-docker-container">Start Docker Container</a></h3>
+<pre class="language-sh" id="codeblock-80"><code>docker start &lt;container_id&gt;
+</code></pre><hr>
+<h2 id="t-docker-volumes" tabindex="-1"><a class="header-anchor" href="#t-docker-volumes">Docker Volumes</a></h2>
+<h3 id="t-list-volumes" tabindex="-1"><a class="header-anchor" href="#t-list-volumes">List volumes</a></h3>
+<pre class="language-sh" id="codeblock-88"><code>docker volume ls
+</code></pre><h3 id="t-remove-volume" tabindex="-1"><a class="header-anchor" href="#t-remove-volume">Remove volume</a></h3>
+<pre class="language-sh" id="codeblock-92"><code>docker volume rm &lt;volume_name&gt;
+</code></pre><h3 id="t-remove-all-volumes" tabindex="-1"><a class="header-anchor" href="#t-remove-all-volumes">Remove all volumes</a></h3>
+<pre class="language-sh" id="codeblock-96"><code>docker volume rm $(docker volume ls -q)
+</code></pre><hr>
+<h2 id="t-docker-inspect" tabindex="-1"><a class="header-anchor" href="#t-docker-inspect">Docker inspect</a></h2>
+<h3 id="t-inspect-a-container" tabindex="-1"><a class="header-anchor" href="#t-inspect-a-container">Inspect a container</a></h3>
+<pre class="language-sh" id="codeblock-104"><code>docker inspect &lt;container_id&gt;
+</code></pre><h3 id="t-inspect-a-volume" tabindex="-1"><a class="header-anchor" href="#t-inspect-a-volume">Inspect a volume</a></h3>
+<pre class="language-sh" id="codeblock-108"><code>docker inspect &lt;volume_name&gt;
+</code></pre><h3 id="t-inspect-a-network" tabindex="-1"><a class="header-anchor" href="#t-inspect-a-network">Inspect a network</a></h3>
+<pre class="language-sh" id="codeblock-112"><code>docker inspect &lt;network_name&gt;
+</code></pre><hr>
+<h2 id="t-docker-interactive-shell" tabindex="-1"><a class="header-anchor" href="#t-docker-interactive-shell">Docker interactive shell</a></h2>
+<h3 id="t-start-interactive-shell-in-a-container" tabindex="-1"><a class="header-anchor" href="#t-start-interactive-shell-in-a-container">Start interactive shell in a container</a></h3>
+<pre class="language-sh" id="codeblock-120"><code>docker exec -it &lt;container_id&gt; sh
+</code></pre><h3 id="t-start-interactive-shell-in-a-container-with-bash---if-bash-is-installed" tabindex="-1"><a class="header-anchor" href="#t-start-interactive-shell-in-a-container-with-bash---if-bash-is-installed">Start interactive shell in a container with bash - if bash is installed</a></h3>
+<pre class="language-sh" id="codeblock-124"><code>docker exec -it &lt;container_id&gt; /bin/bash
+# or
+docker exec -it &lt;container_id&gt; bash
+</code></pre><hr>
+<h2 id="t-docker-logs" tabindex="-1"><a class="header-anchor" href="#t-docker-logs">Docker logs</a></h2>
+<h3 id="t-show-all-logs-and-follow" tabindex="-1"><a class="header-anchor" href="#t-show-all-logs-and-follow">Show all logs and follow</a></h3>
+<pre class="language-sh" id="codeblock-132"><code>docker logs -f $(docker ps -a -q)
+</code></pre><h3 id="t-show-logs-of-a-container" tabindex="-1"><a class="header-anchor" href="#t-show-logs-of-a-container">Show logs of a container</a></h3>
+<pre class="language-sh" id="codeblock-136"><code>docker logs &lt;container_id&gt;
+</code></pre><h3 id="t-show-logs-of-a-container-with-timestamps" tabindex="-1"><a class="header-anchor" href="#t-show-logs-of-a-container-with-timestamps">Show logs of a container with timestamps</a></h3>
+<pre class="language-sh" id="codeblock-140"><code>docker logs -t &lt;container_id&gt;
+</code></pre><h3 id="t-show-logs-of-a-container-with-timestamps-and-follow" tabindex="-1"><a class="header-anchor" href="#t-show-logs-of-a-container-with-timestamps-and-follow">Show logs of a container with timestamps and follow</a></h3>
+<pre class="language-sh" id="codeblock-144"><code>docker logs -tf &lt;container_id&gt;
+</code></pre><hr>
+<h2 id="t-docker-stats" tabindex="-1"><a class="header-anchor" href="#t-docker-stats">Docker stats</a></h2>
+<h3 id="t-show-stats-of-all-running-containers" tabindex="-1"><a class="header-anchor" href="#t-show-stats-of-all-running-containers">Show stats of all running containers</a></h3>
+<pre class="language-sh" id="codeblock-152"><code>docker stats
+</code></pre><h3 id="t-show-stats-of-a-container" tabindex="-1"><a class="header-anchor" href="#t-show-stats-of-a-container">Show stats of a container</a></h3>
+<pre class="language-sh" id="codeblock-156"><code>docker stats &lt;container_id&gt;
+</code></pre><hr>
+<h2 id="t-docker-network" tabindex="-1"><a class="header-anchor" href="#t-docker-network">Docker network</a></h2>
+<h3 id="t-list-networks" tabindex="-1"><a class="header-anchor" href="#t-list-networks">List networks</a></h3>
+<pre class="language-sh" id="codeblock-164"><code>docker network ls
+</code></pre><h3 id="t-remove-network" tabindex="-1"><a class="header-anchor" href="#t-remove-network">Remove network</a></h3>
+<pre class="language-sh" id="codeblock-168"><code>docker network rm &lt;network_name&gt;
+</code></pre><h3 id="t-remove-all-networks" tabindex="-1"><a class="header-anchor" href="#t-remove-all-networks">Remove all networks</a></h3>
+<pre class="language-sh" id="codeblock-172"><code>docker network rm $(docker network ls -q)
+</code></pre><hr>
+<h2 id="t-docker-compose" tabindex="-1"><a class="header-anchor" href="#t-docker-compose">Docker-compose</a></h2>
+<h3 id="t-start-docker-compose" tabindex="-1"><a class="header-anchor" href="#t-start-docker-compose">Start docker compose</a></h3>
+<pre class="language-sh" id="codeblock-180"><code>docker compose up -d
+</code></pre><h3 id="t-stop-docker-compose" tabindex="-1"><a class="header-anchor" href="#t-stop-docker-compose">Stop docker compose</a></h3>
+<pre class="language-sh" id="codeblock-184"><code>docker compose down
+</code></pre><h3 id="t-restart-docker-compose" tabindex="-1"><a class="header-anchor" href="#t-restart-docker-compose">Restart docker compose</a></h3>
+<pre class="language-sh" id="codeblock-188"><code>docker compose restart
+</code></pre><h3 id="t-show-stats-of-docker-compose" tabindex="-1"><a class="header-anchor" href="#t-show-stats-of-docker-compose">Show stats of docker compose</a></h3>
+<pre class="language-sh" id="codeblock-192"><code>docker compose ps
+</code></pre><h3 id="t-show-stats-of-a-service-in-docker-compose" tabindex="-1"><a class="header-anchor" href="#t-show-stats-of-a-service-in-docker-compose">Show stats of a service in docker compose</a></h3>
+<pre class="language-sh" id="codeblock-196"><code>docker compose ps &lt;service_name&gt;
+</code></pre><h3 id="t-update-docker-compose" tabindex="-1"><a class="header-anchor" href="#t-update-docker-compose">Update docker compose</a></h3>
+<pre class="language-sh" id="codeblock-200"><code>docker compose pull
+</code></pre><hr>
+<h2 id="t-docker-compose-logs" tabindex="-1"><a class="header-anchor" href="#t-docker-compose-logs">Docker-compose logs</a></h2>
+<h3 id="t-show-all-logs-of-docker-compose-and-follow" tabindex="-1"><a class="header-anchor" href="#t-show-all-logs-of-docker-compose-and-follow">Show all logs of docker compose and follow</a></h3>
+<pre class="language-sh" id="codeblock-208"><code>docker compose logs -f
+</code></pre><h3 id="t-show-logs-of-a-service-in-docker-compose" tabindex="-1"><a class="header-anchor" href="#t-show-logs-of-a-service-in-docker-compose">Show logs of a service in docker compose</a></h3>
+<pre class="language-sh" id="codeblock-212"><code>docker compose logs &lt;service_name&gt;
+</code></pre><h3 id="t-show-logs-of-a-service-in-docker-compose-with-timestamps" tabindex="-1"><a class="header-anchor" href="#t-show-logs-of-a-service-in-docker-compose-with-timestamps">Show logs of a service in docker compose with timestamps</a></h3>
+<pre class="language-sh" id="codeblock-216"><code>docker compose logs -t &lt;service_name&gt;
+</code></pre><h3 id="t-show-logs-of-a-service-in-docker-compose-with-timestamps-and-follow" tabindex="-1"><a class="header-anchor" href="#t-show-logs-of-a-service-in-docker-compose-with-timestamps-and-follow">Show logs of a service in docker compose with timestamps and follow</a></h3>
+<pre class="language-sh" id="codeblock-220"><code>docker compose logs -tf &lt;service_name&gt;
+</code></pre><hr>
+<h2 id="t-docker-compose-interactive-shell" tabindex="-1"><a class="header-anchor" href="#t-docker-compose-interactive-shell">Docker-compose interactive shell</a></h2>
+<h3 id="t-start-interactive-shell-in-a-service-of-docker-compose" tabindex="-1"><a class="header-anchor" href="#t-start-interactive-shell-in-a-service-of-docker-compose">Start interactive shell in a service of docker compose</a></h3>
+<pre class="language-sh" id="codeblock-228"><code>docker compose exec &lt;service_name&gt; sh
+</code></pre><h3 id="t-start-interactive-shell-in-a-service-of-docker-compose-with-bash---if-bash-is-installed" tabindex="-1"><a class="header-anchor" href="#t-start-interactive-shell-in-a-service-of-docker-compose-with-bash---if-bash-is-installed">Start interactive shell in a service of docker compose with bash - if bash is installed</a></h3>
+<pre class="language-sh" id="codeblock-232"><code>docker compose exec &lt;service_name&gt; /bin/bash
+# or
+docker compose exec &lt;service_name&gt; bash
+</code></pre><hr>
+<h2 id="t-dockerfile-build" tabindex="-1"><a class="header-anchor" href="#t-dockerfile-build">Dockerfile Build</a></h2>
+<h3 id="t-build-dockerfile" tabindex="-1"><a class="header-anchor" href="#t-build-dockerfile">Build Dockerfile</a></h3>
+<pre class="language-sh" id="codeblock-240"><code>docker build -t &lt;image_name&gt; .
+# e.g.
+docker build -t gws/my_image .
+</code></pre><h3 id="t-build-dockerfile-with-a-tag" tabindex="-1"><a class="header-anchor" href="#t-build-dockerfile-with-a-tag">Build Dockerfile with a tag</a></h3>
+<pre class="language-sh" id="codeblock-244"><code>docker build -t &lt;image_name&gt;:&lt;tag&gt; .
+</code></pre><h3 id="t-build-dockerfile-with-a-tag-and-a-build-argument" tabindex="-1"><a class="header-anchor" href="#t-build-dockerfile-with-a-tag-and-a-build-argument">Build Dockerfile with a tag and a build argument</a></h3>
+<pre class="language-sh" id="codeblock-248"><code>docker build -t &lt;image_name&gt;:&lt;tag&gt; --build-arg &lt;key&gt;=&lt;value&gt; .
+</code></pre><h3 id="t-build-dockerfile-with-a-tag-and-a-build-argument-from-a-file" tabindex="-1"><a class="header-anchor" href="#t-build-dockerfile-with-a-tag-and-a-build-argument-from-a-file">Build Dockerfile with a tag and a build argument from a file</a></h3>
+<pre class="language-sh" id="codeblock-252"><code>docker build -t &lt;image_name&gt;:&lt;tag&gt; --build-arg &lt;key&gt;=$(cat &lt;file&gt;) .
+</code></pre><hr>
+<h2 id="t-dockerfile" tabindex="-1"><a class="header-anchor" href="#t-dockerfile">Dockerfile</a></h2>
+<h3 id="t-dockerfile-example" tabindex="-1"><a class="header-anchor" href="#t-dockerfile-example">Dockerfile example</a></h3>
+<pre class="language-dockerfile" id="codeblock-260"><code># Use an official Python runtime as a parent image
+FROM python:3.7-slim
+
+# Set the working directory to /app
+# The WORKDIR instruction sets the working directory for any RUN, CMD, 
+# ENTRYPOINT, COPY and ADD instructions that follow it in the Dockerfile.
+# When the directory is not found, it will be created.
+WORKDIR /app
+
+# Copy the current directory contents into the container at /app
+COPY . /app
+
+# Install any needed packages specified in requirements.txt
+RUN pip install --trusted-host pypi.python.org -r requirements.txt
+
+# Make port 80 available to the world outside this container
+EXPOSE 80
+
+# Define environment variable
+ENV NAME World
+
+# Run app.py when the container launches
+CMD [&quot;python&quot;, &quot;app.py&quot;]
+</code></pre><hr>
+<h2 id="t-bind-mounts-and-volumes" tabindex="-1"><a class="header-anchor" href="#t-bind-mounts-and-volumes">Bind Mounts and Volumes</a></h2>
+<h3 id="t-bind-mounts-and-volumes-comparison-table" tabindex="-1"><a class="header-anchor" href="#t-bind-mounts-and-volumes-comparison-table">Bind Mounts and volumes comparison table</a></h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Named volumes</th>
+<th>Bind mounts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Host location</strong></td>
+<td>Docker chooses</td>
+<td>You decide</td>
+</tr>
+<tr>
+<td><strong>Populates new volume with container contents</strong></td>
+<td>Yes</td>
+<td><strong>No</strong></td>
+</tr>
+<tr>
+<td><strong>Supports Volume Drivers</strong></td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</div><div class="footer"><a class="brand-link" href="https://www.berlin-university-alliance.de/index.html"><span class="brand">BUA</span><span class="brand-second">DNS</span></a></div></main></body></html>
