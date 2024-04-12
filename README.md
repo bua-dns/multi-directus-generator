@@ -6,7 +6,7 @@ This tool creates all config files and console commands necessary to a deploy a 
 
 Fork this repo and install the dependencies.
 
-```bash
+```sh
 npm install
 ```
 

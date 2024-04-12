@@ -2,7 +2,7 @@
 
 ## create directories on server
 
-```bash
+```sh
 mkdir -p /var/www/§§url§§/data/database
 mkdir /var/www/§§url§§/data/uploads
 mkdir /var/www/§§url§§/data/extensions
@@ -13,19 +13,19 @@ Load config file /Step-1/§§url§§.conf onto server in /etc/apache2/sites-avai
 
 Enable site:
 
-```bash
+```sh
 a2ensite §§url§§.conf
 ```
 Restart Apache webserver:
 
-```bash
+```sh
 systemctl reload apache2
 ``` 
 ## certbot
 
 Install SSL certificate with certbot: 
 
-```bash
+```sh
 certbot certonly --webroot -w /var/www/html -d §§url§§  --agree-tos --preferred-challenges http
 ```
 ## upload apache config file (Step 2)
@@ -36,7 +36,7 @@ Note: Same file as in Step 1, with SSL-specific parts **not** commented out (as 
 
 Restart Apache Webserver:
 
-```bash
+```sh
 systemctl reload apache2
 ``` 
 
@@ -46,7 +46,7 @@ Load docker-compose.yml onto server in /var/www/§§url§§.
 
 Start Docker container:
 
-```bash
+```sh
 cd /var/www/§§url§§
 docker-compose up -d
 ```
@@ -55,11 +55,11 @@ docker-compose up -d
 
 For technical reasons the following command has to be run **after** the installation of the docker container is ready:
 
-```bash
+```sh
 docker-compose exec -u root directus_NUMBER_ chown -R node:node /directus/database /directus/extensions /directus/uploads
 ```
 Finally, restart the container:
 
-```bash
+```sh
 docker-compose restart
 ```

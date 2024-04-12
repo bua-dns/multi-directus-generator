@@ -61,6 +61,12 @@ try {
     if (!validLabel){
         throw new Error('label must be shorter than 10 characters and contain lowercase letters and underscores only');
     }
+    let validInstanceCounter =  Number.isInteger(parseInt(config.instanceCounter)) && 
+                                parseInt(config.instanceCounter) > 0 &&
+                                parseInt(config.instanceCounter) <= 150;
+    if (!validInstanceCounter){
+        throw new Error('Counter must be a number between 1 and 150');
+    }
 
     // docker compose file
     const dockerComposeReplacements = {
