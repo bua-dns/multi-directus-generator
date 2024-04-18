@@ -48,6 +48,10 @@ The "instanceCounter" value has to be unique for each instance you are deploying
 - PM2 installed on server
 - (sub)domain pointing to this server
 
+## Documentation
+
+See [https://bua-dns.github.io/multi-directus-generator/](https://bua-dns.github.io/multi-directus-generator/) for more information.
+
 ## Status
 
 WORK IN PROGRESS
