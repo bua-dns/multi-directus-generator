@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="de"><head><title>Docker Multi-Instanz Setup Directus</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="assets/css/style.min.css"><link rel="stylesheet" href="assets/css/prism.min.css"><script src="assets/js/clipboard.min.js"></script><script src="assets/js/prism.js"></script><script src="assets/js/raphael.min.js"></script><script src="assets/js/flowchart.min.js"></script><script src="assets/js/app.min.js"></script><script src="meta.js"></script><link rel="icon" type="image/x-icon" href="assets/img/icons/favicon.ico"><link rel="icon" type="image/svg+xml" href="assets/img/icons/favicon.svg"><link rel="apple-touch-icon" sizes="192x192" href="assets/img/icons/favicon-192x192.png"><link rel="apple-touch-icon" sizes="512x512" href="assets/img/icons/favicon-512x512.png"></head><body><div class="navbar"><a class="navbar__brand" href="https://www.berlin-university-alliance.de/index.html"><span class="brand">BUA</span><span class="brand-second">DNS</span></a><div class="navbar__controls"><button class="btn-tag-nav navitem" id="open-tag-navigation" aria-label="Tag-Navigation öffnen" title="Tag-Navigation öffnen" role="button"><svg class="bi bi-tags" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M3 2v4.586l7 7L14.586 9l-7-7H3zM2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586V2z"></path><path d="M5.5 5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm0 1a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM1 7.086a1 1 0 0 0 .293.707L8.75 15.25l-.043.043a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 0 7.586V3a1 1 0 0 1 1-1v5.086z"></path></svg><span class="navitem-title">Tag Navigator</span></button><button class="theme-toggle" aria-label="Wechseln Sie zwischen hellen und dunklen Thema" title="Wechseln Sie zwischen hellen und dunklen Thema"></button><button class="burger" aria-expanded="false" aria-label="navigation menu"><span class="burger__line burger__line-1" aria-hidden="true" focusable="false"></span><span class="burger__line burger__line-2" aria-hidden="true" focusable="false"></span><span class="burger__line burger__line-3" aria-hidden="true" focusable="false"></span></button></div></div><nav class="navigation-drawer" aria-label="Main menu"><h3 class="nav-title text-center">Inhaltsverzeichnis</h3><div class="toc"><div class="table-of-contents"><ul><li><a href="#t-docker-multi-instanz-setup">Docker Multi-Instanz Setup</a><ul><li><a href="#t-directus--mariadb">Directus &amp; MariaDB</a><ul><li><a href="#t-dateistruktur-auf-server">Dateistruktur auf Server</a></li><li><a href="#t--bsp-container-1">🐳 Bsp. Container 1</a><ul><li><a href="#t-dotenv-datei">Dotenv Datei</a></li><li><a href="#t-docker-compose-datei">Docker-Compose Datei</a></li><li><a href="#t-konfiguration-testen">Konfiguration testen</a></li><li><a href="#t-container-starten">Container starten</a></li><li><a href="#t-apache-virtualhost-config-datei">Apache-Virtualhost-Config Datei</a></li><li><a href="#t-bugfix-">Bugfix 🐞</a></li><li><a href="#t-endpunkte">Endpunkte</a></li></ul></li><li><a href="#t--directus-test">🧪 Directus Test</a></li><li><a href="#t--bsp-container-2">🐳 Bsp. Container 2</a><ul><li><a href="#t-dotenv-datei-1">Dotenv Datei</a></li><li><a href="#t-apache-virtualhost-config-datei-1">Apache-Virtualhost-Config Datei</a></li></ul></li></ul></li><li><a href="#t-datenbank-backup">Datenbank Backup</a><ul><li><a href="#t--backup-skript-erstellen">📦 Backup-Skript erstellen</a></li><li><a href="#t-skript-in-crontab-eintragen">Skript in crontab eintragen</a></li></ul></li></ul></li></ul></div></div><div class="sitenav"><h3 class="nav-title text-center">Navigation</h3><ul><li><a class="active" href="index.html">Docker Multi-Instanz Setup</a></li><li><a href="docker.html">Docker Cheat Sheet</a></li></ul></div></nav><main class="page"><div class="mtime">letzte Aktualisierung Freitag, 19. April 2024 um 15:32:46 Uhr</div><div class="content"><h1 class="text-center" id="t-docker-multi-instanz-setup" tabindex="-1"><a class="header-anchor" href="#t-docker-multi-instanz-setup">Docker Multi-Instanz Setup</a></h1>
+<!DOCTYPE html><html lang="de"><head><title>Docker Multi-Instanz Setup Directus</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="assets/css/style.min.css"><link rel="stylesheet" href="assets/css/prism.min.css"><script src="assets/js/clipboard.min.js"></script><script src="assets/js/prism.js"></script><script src="assets/js/raphael.min.js"></script><script src="assets/js/flowchart.min.js"></script><script src="assets/js/app.min.js"></script><script src="meta.js"></script><link rel="icon" type="image/x-icon" href="assets/img/icons/favicon.ico"><link rel="icon" type="image/svg+xml" href="assets/img/icons/favicon.svg"><link rel="apple-touch-icon" sizes="192x192" href="assets/img/icons/favicon-192x192.png"><link rel="apple-touch-icon" sizes="512x512" href="assets/img/icons/favicon-512x512.png"></head><body><div class="navbar"><a class="navbar__brand" href="https://www.berlin-university-alliance.de/index.html"><span class="brand">BUA</span><span class="brand-second">DNS</span></a><div class="navbar__controls"><button class="btn-tag-nav navitem" id="open-tag-navigation" aria-label="Tag-Navigation öffnen" title="Tag-Navigation öffnen" role="button"><svg class="bi bi-tags" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M3 2v4.586l7 7L14.586 9l-7-7H3zM2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586V2z"></path><path d="M5.5 5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm0 1a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM1 7.086a1 1 0 0 0 .293.707L8.75 15.25l-.043.043a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 0 7.586V3a1 1 0 0 1 1-1v5.086z"></path></svg><span class="navitem-title">Tag Navigator</span></button><button class="theme-toggle" aria-label="Wechseln Sie zwischen hellen und dunklen Thema" title="Wechseln Sie zwischen hellen und dunklen Thema"></button><button class="burger" aria-expanded="false" aria-label="navigation menu"><span class="burger__line burger__line-1" aria-hidden="true" focusable="false"></span><span class="burger__line burger__line-2" aria-hidden="true" focusable="false"></span><span class="burger__line burger__line-3" aria-hidden="true" focusable="false"></span></button></div></div><nav class="navigation-drawer" aria-label="Main menu"><h3 class="nav-title text-center">Inhaltsverzeichnis</h3><div class="toc"><div class="table-of-contents"><ul><li><a href="#t-docker-multi-instanz-setup">Docker Multi-Instanz Setup</a><ul><li><a href="#t-directus--mariadb">Directus &amp; MariaDB</a><ul><li><a href="#t-dateistruktur-auf-server">Dateistruktur auf Server</a></li><li><a href="#t--bsp-container-1">🐳 Bsp. Container 1</a><ul><li><a href="#t-dotenv-datei">Dotenv Datei</a></li><li><a href="#t-docker-compose-datei">Docker-Compose Datei</a></li><li><a href="#t-konfiguration-testen">Konfiguration testen</a></li><li><a href="#t-container-starten">Container starten</a></li><li><a href="#t-apache-virtualhost-config-datei">Apache-Virtualhost-Config Datei</a></li><li><a href="#t-bugfix-">Bugfix 🐞</a></li><li><a href="#t-endpunkte">Endpunkte</a></li></ul></li><li><a href="#t--directus-test">🧪 Directus Test</a></li><li><a href="#t--bsp-container-2">🐳 Bsp. Container 2</a><ul><li><a href="#t-dotenv-datei-1">Dotenv Datei</a></li><li><a href="#t-apache-virtualhost-config-datei-1">Apache-Virtualhost-Config Datei</a></li></ul></li></ul></li><li><a href="#t-datenbank-backup">Datenbank Backup</a><ul><li><a href="#t--backup-skript-erstellen">📦 Backup-Skript erstellen</a></li><li><a href="#t-skript-in-crontab-eintragen">Skript in crontab eintragen</a></li></ul></li></ul></li></ul></div></div><div class="sitenav"><h3 class="nav-title text-center">Navigation</h3><ul><li><a class="active" href="index.html">Docker Multi-Instanz Setup</a></li><li><a href="docker.html">Docker Cheat Sheet</a></li></ul></div></nav><main class="page"><div class="mtime">letzte Aktualisierung Freitag, 19. April 2024 um 20:56:49 Uhr</div><div class="content"><h1 class="text-center" id="t-docker-multi-instanz-setup" tabindex="-1"><a class="header-anchor" href="#t-docker-multi-instanz-setup">Docker Multi-Instanz Setup</a></h1>
 <hr>
 <h2 id="t-directus--mariadb" tabindex="-1"><a class="header-anchor" href="#t-directus--mariadb">Directus &amp; MariaDB</a></h2>
 <h3 id="t-dateistruktur-auf-server" tabindex="-1"><a class="header-anchor" href="#t-dateistruktur-auf-server">Dateistruktur auf Server</a></h3>
@@ -70,7 +70,10 @@ DIRECTUS_SECRET=12345678-1234-1234-1234-123456789012
 DIRECTUS_ADMIN_EMAIL=YOUR_E-MAIL_HERE
 DIRECTUS_ADMIN_PASSWORD=A_SECRET_PASSWORD
 DIRECTUS_PUBLIC_URL=https://subone.domain.tld/
-</code></pre><h4 id="t-docker-compose-datei" tabindex="-1"><a class="header-anchor" href="#t-docker-compose-datei">Docker-Compose Datei</a></h4>
+</code></pre><details><summary>Generierung von DIRECTUS_KEY und DIRECTUS_SECRET auf der Konsole</summary>
+<p><img src="img/generate-key.gif" alt="generate KEY and SECRET on the console"></p>
+</details>
+<h4 id="t-docker-compose-datei" tabindex="-1"><a class="header-anchor" href="#t-docker-compose-datei">Docker-Compose Datei</a></h4>
 <h5 id="t-docker-composeyml" tabindex="-1"><a class="header-anchor" href="#t-docker-composeyml"><code>docker-compose.yml</code></a></h5>
 
             <div class="custom-conatiner warning" tabindex="0">
@@ -82,7 +85,7 @@ Unter anderem werden die Container-Namen auch als Hostnamen verwendet. In Hostna
 (The use of underscores in hostnames violates RFC 1123’s valid defined characters for a domain name.)</p>
 </div>
 </div>
-<pre class="language-yml" id="codeblock-62"><code>services:
+<pre class="language-yml" id="codeblock-67"><code>services:
   directus-db:
     image: mariadb:latest
     restart: unless-stopped
@@ -173,21 +176,21 @@ Anschließend muss der Kernel neu geladen werden: <code>sysctl -p</code>, oder d
               <div class="custom-conatiner-title tip-title"> MySQL Zugriff von außen</div>
               <div class="custom-conatiner-body tip-body">
 <p>Wenn der MySQL-Zugriff von außen benötigt wird, muss ein Port in der Konfiguration des MySQL-Containers freigegeben werden. z.B.:</p>
-<pre class="language-yml" id="codeblock-72"><code>  directus-db:
+<pre class="language-yml" id="codeblock-77"><code>  directus-db:
     - ports:
       - &quot;${DB_PORT}:80&quot;
 </code></pre></div>
 </div>
 <h4 id="t-konfiguration-testen" tabindex="-1"><a class="header-anchor" href="#t-konfiguration-testen">Konfiguration testen</a></h4>
-<pre class="command-line language-shell" data-user="root" data-host="mmok-workbench" id="codeblock-77"><code>cd /var/www/subone.domain.tld
+<pre class="command-line language-shell" data-user="root" data-host="mmok-workbench" id="codeblock-82"><code>cd /var/www/subone.domain.tld
 docker-compose config
 </code></pre><p>Das Kommando sollte keine Fehler ausgeben.</p>
 <h4 id="t-container-starten" tabindex="-1"><a class="header-anchor" href="#t-container-starten">Container starten</a></h4>
-<pre class="command-line language-shell" data-user="root" data-host="mmok-workbench" id="codeblock-84"><code>cd /var/www/subone.domain.tld
+<pre class="command-line language-shell" data-user="root" data-host="mmok-workbench" id="codeblock-89"><code>cd /var/www/subone.domain.tld
 docker-compose up -d
 </code></pre><h4 id="t-apache-virtualhost-config-datei" tabindex="-1"><a class="header-anchor" href="#t-apache-virtualhost-config-datei">Apache-Virtualhost-Config Datei</a></h4>
 <h5 id="t-subonedomaintldconf" tabindex="-1"><a class="header-anchor" href="#t-subonedomaintldconf"><code>subone.domain.tld.conf</code></a></h5>
-<pre class="line-numbers language-apacheconf" data-line="3,6,10-11,16,28-29,36-37,39-40,42-43" id="codeblock-91"><code>&lt;VirtualHost *:80&gt;
+<pre class="line-numbers language-apacheconf" data-line="3,6,10-11,16,28-29,36-37,39-40,42-43" id="codeblock-96"><code>&lt;VirtualHost *:80&gt;
     ServerAdmin webmaster@localhost
     ServerName subone.domain.tld
     # ServerAlias www.subone.domain.tld
@@ -253,14 +256,14 @@ docker-compose up -d
 </div>
 </div>
 <p>Der directus container <code>directus-1</code> muss laufen, überprüfen mit:</p>
-<pre class="command-line language-shell" data-user="root" data-host="mmok-workbench" data-output="2-6" id="codeblock-111"><code>docker ps
+<pre class="command-line language-shell" data-user="root" data-host="mmok-workbench" data-output="2-6" id="codeblock-116"><code>docker ps
 CONTAINER ID   IMAGE                      CREATED       STATUS       ports                                       NAMES
 a8fcf79b0ab2   directus/directus:latest   2 weeks ago   Up 2 weeks   0.0.0.0:8055-&gt;8055/tcp, :::8055-&gt;8055/tcp   1-directus-app-1
 65c03b70840a   phpmyadmin                 2 weeks ago   Up 2 weeks   0.0.0.0:8080-&gt;80/tcp, :::8080-&gt;80/tcp       1-directus-pma-1
 9da68cd42fa8   mariadb:latest             2 weeks ago   Up 2 weeks   3306/tcp                                    1-directus-db-1
 31e3b4950ba9   redis:latest               2 weeks ago   Up 2 weeks   6379/tcp                                    1-directus-cache-1
 </code></pre><p>Dann für den Bugfix eingeben:</p>
-<pre class="command-line language-shell" data-user="root" data-host="mmok-workbench" id="codeblock-115"><code>cd /var/www/subone.domain.tld
+<pre class="command-line language-shell" data-user="root" data-host="mmok-workbench" id="codeblock-120"><code>cd /var/www/subone.domain.tld
 docker-compose exec -u root directus-1 chown -R node:node /directus/database /directus/extensions /directus/uploads
 docker-compose restart
 </code></pre><h4 id="t-endpunkte" tabindex="-1"><a class="header-anchor" href="#t-endpunkte">Endpunkte</a></h4>
@@ -300,7 +303,7 @@ docker-compose restart
 Alle weiteren Schritte analog zum ersten Container.</p>
 <h4 id="t-apache-virtualhost-config-datei-1" tabindex="-1"><a class="header-anchor" href="#t-apache-virtualhost-config-datei-1">Apache-Virtualhost-Config Datei</a></h4>
 <h5 id="t-subtwodomaintldconf" tabindex="-1"><a class="header-anchor" href="#t-subtwodomaintldconf"><code>subtwo.domain.tld.conf</code></a></h5>
-<pre class="line-numbers language-apacheconf" data-line="3,6,10-11,16,28-29,36-37,39-40,42-43" id="codeblock-219"><code>&lt;VirtualHost *:80&gt;
+<pre class="line-numbers language-apacheconf" data-line="3,6,10-11,16,28-29,36-37,39-40,42-43" id="codeblock-224"><code>&lt;VirtualHost *:80&gt;
     ServerAdmin webmaster@localhost
     ServerName subtwo.domain.tld
     # ServerAlias www.subtwo.domain.tld
@@ -361,7 +364,7 @@ Alle weiteren Schritte analog zum ersten Container.</p>
 <h2 id="t-datenbank-backup" tabindex="-1"><a class="header-anchor" href="#t-datenbank-backup">Datenbank Backup</a></h2>
 <h3 id="t--backup-skript-erstellen" tabindex="-1"><a class="header-anchor" href="#t--backup-skript-erstellen">📦 Backup-Skript erstellen</a></h3>
 <p>Skript erstellen unter z.B.: <code>/mnt/volume-fsn1-1/backup/backup-docker-db.sh</code></p>
-<pre class="language-shell" id="codeblock-237"><code>#!/usr/bin/env bash
+<pre class="language-shell" id="codeblock-242"><code>#!/usr/bin/env bash
 
 # ---------------- config: ----------------
 BACKUPDIR=&quot;/mnt/volume-fsn1-1/backup/db&quot;
@@ -381,7 +384,7 @@ done
 
 find $BACKUPDIR -type f -name &quot;*.gz&quot; -mtime +$DAYS_TO_KEEP -delete;
 </code></pre><p>Backup-Verzeichnis erstellen:</p>
-<pre class="language-shell" id="codeblock-241"><code>mkdir -p /mnt/volume-fsn1-1/backup/db
+<pre class="language-shell" id="codeblock-246"><code>mkdir -p /mnt/volume-fsn1-1/backup/db
 </code></pre><h3 id="t-skript-in-crontab-eintragen" tabindex="-1"><a class="header-anchor" href="#t-skript-in-crontab-eintragen">Skript in crontab eintragen</a></h3>
-<pre class="language-shell" id="codeblock-245"><code>ln -s /mnt/volume-fsn1-1/backup/backup-docker-db.sh /etc/cron.daily/backup-docker-db
+<pre class="language-shell" id="codeblock-250"><code>ln -s /mnt/volume-fsn1-1/backup/backup-docker-db.sh /etc/cron.daily/backup-docker-db
 </code></pre></div><div class="footer"><a class="brand-link" href="https://www.berlin-university-alliance.de/index.html"><span class="brand">BUA</span><span class="brand-second">DNS</span></a></div></main></body></html>
